@@ -1,3 +1,9 @@
+certificates/CRIA-CERTIFICADO
+certificates/docx
+certificates/pdf
+# */templates
+
+
 # Django #
 *.log
 *.pot
