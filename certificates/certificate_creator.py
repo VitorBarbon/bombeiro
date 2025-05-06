@@ -6,7 +6,6 @@ import locale
 from pathlib import Path
 from project.utils import paths
 
-
 TEMPLATE_DIR = paths.CERTIFICATES_DIR / 'templates' / 'brigada_de_incendio.docx'  
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
@@ -57,15 +56,3 @@ class Certificate:
         pdf_file = self.pdf_dir / f'{name_file}.pdf'
         self.docx.save(docx_file)
         convert(docx_file, pdf_file)
-        
-        
-if __name__ == '__main__':
-    import sys
-    
-    ROOT_DIR = Path(__file__).resolve().parent
-    print(ROOT_DIR)
-    sys.path.append(str(ROOT_DIR))
-    TEMPLATE_DIR = ROOT_DIR / 'templates' / 'brigada_de_incendio.docx'
-    certificate = Certificate(TEMPLATE_DIR, ROOT_DIR)
-    certificate.handle_certificate('Vitor Barbon', '04/05/2025', '4', 'Vitor LTDA')
-    print('ok')
