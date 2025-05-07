@@ -5,6 +5,7 @@ import locale
 from pathlib import Path
 from project.utils import paths
 
+
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 TEMPLATE_DIR = paths.CERTIFICATES_DIR / 'templates' / 'brigada_de_incendio.docx'
@@ -17,7 +18,9 @@ class Certificate:
         self.pdf_dir = self.output_dir / 'pdf'
         self.docx: Document | None = None
         self._created_date: str = datetime.now().strftime("%d de %B de %Y")
-
+        self._load_template()
+        self._ensure_directories()
+        
     def __repr__(self) -> str:
         return f'Certificate(template_dir={self.template_dir}, output_dir={self.output_dir})'
 
@@ -33,15 +36,16 @@ class Certificate:
 
     def _load_template(self) -> None:
         """Load the Word document template."""
-        self.docx = Document(self.template_dir)
+        if self.docx is None:
+            self.docx = Document(self.template_dir)
 
     def _replace_placeholders(self, replacements: dict[str, str]) -> None:
         """Replace placeholders in the document with actual values."""
         for paragraph in self.docx.paragraphs:
             if any(placeholder in paragraph.text for placeholder in replacements.keys()):
-                for run in paragraph.runs:
-                    for placeholder, value in replacements.items():
-                        run.text = run.text.replace(placeholder, value)
+                # for run in paragraph.runs:
+                for placeholder, value in replacements.items():
+                    paragraph.text = paragraph.text.replace(placeholder, value)
 
     def _save_document(self, name: str) -> tuple[Path, Path]:
         """Save the document as both DOCX and PDF."""
@@ -63,8 +67,6 @@ class Certificate:
         Create a certificate by replacing placeholders in the template
         and saving it as both DOCX and PDF.
         """
-        self._ensure_directories()
-        self._load_template()
         replacements = {
             'REPLACE_name': name.title(),
             'REPLACE_date': date,

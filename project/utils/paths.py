@@ -7,6 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DOCS_DIR = BASE_DIR / 'docs'
 DATA_DIR = BASE_DIR / 'data'
 CLIENTS_DIR = BASE_DIR / 'clients'
+UI_DIR = BASE_DIR / 'ui'
 REPORTS_DIR = BASE_DIR / 'reports'
 CERTIFICATES_DIR = BASE_DIR / 'certificates'
 

@@ -53,6 +53,5 @@ def create_template() -> None:
             for col_num, _ in enumerate(row_data, start=0):
                 cell_format = workbook.add_format({'border': 1})
                 worksheet_participants.write(row_num, col_num, df2.iloc[row_num - 1, col_num], cell_format)
-    
 
-print("Table created and saved to '{TEMPLATE_XLSX}/template.xlsx'")
+        print(f"Table created and saved to '{TEMPLATE_XLSX}/template.xlsx'")
