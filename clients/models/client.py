@@ -1,36 +1,32 @@
-import json
-# from project.utils import paths
-from typing import Dict, Optional
-from pydantic import BaseModel
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import declarative_base, relationship
 
-class CityHallService(BaseModel):
-    owner_name: Optional[str]
-    owner_cpf: Optional[str]
-    property_type: Optional[str]
+Base = declarative_base()
+
+class CityHallServiceDB(Base):
+    __tablename__ = 'city_hall_service'
+    id = Column(Integer, primary_key=True)
+    owner_name = Column(String)
+    owner_cpf = Column(String)
+    property_type = Column(String)
+
+class FireDepartmentServiceDB(Base):
+    __tablename__ = 'fire_department_service'
+    id = Column(Integer, primary_key=True)
+    area = Column(Float)
+    fire_load = Column(Float)
+
+class ClientDB(Base):
+    __tablename__ = 'clients'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    email = Column(String)
+    phone = Column(String)
+    address = Column(String, nullable=False)
+    occupation = Column(String, nullable=False)
     
+    city_hall_service_id = Column(Integer, ForeignKey('city_hall_service.id'))
+    fire_department_service_id = Column(Integer, ForeignKey('fire_department_service.id'))
 
-class FireDepartmentService(BaseModel):
-    area: Optional[float]
-    fire_load: Optional[float]
-    
-    
-class Client(BaseModel):
-    name: str
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    address: str
-    occupation: str
-    city_hall_service: Optional[CityHallService] = None
-    fire_department_service: Optional[FireDepartmentService] = None
-
-    def to_dict(self) -> Dict:
-        return json.loads(self.json())
-
-    @classmethod
-    def from_dict(cls, data: Dict) -> "Client":
-        return cls(**data)
-
-    # drepecated in pydantic, search for the new way to do it
-    # @classmethod
-    # def from_json(cls, json_str: str) -> "Client":
-    #     return cls.parse_raw(json_str) 
+    city_hall_service = relationship("CityHallServiceDB")
+    fire_department_service = relationship("FireDepartmentServiceDB")

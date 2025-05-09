@@ -89,6 +89,11 @@ if __name__ == '__main__':
             fire_load=200.0
         ),
     )
-    storage = StorageClient(paths.DATA_DIR / 'clients.jsonl')
-    storage.add_client_jsonl(client)
+    storage = StorageClient(paths.DATA_DIR / 'clients.db')
+    # storage.add_client_jsonl(client)
+    clients_filtered = storage.filter_client('Vitor Barbon 2')    
+    for client in clients_filtered:
+        print(client, sep='\n')
+        
+        
     
