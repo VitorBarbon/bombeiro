@@ -8,6 +8,8 @@ from certificates.create_template_xlsx import create_template
 from certificates.extract_data_xlsx import extract_data_from_xlsx
 from ui.main_window import MainWindow
 from project.utils import paths
+from clients.models.client import Client, FireDepartmentService, CityHallService
+from clients.storage.storage import StorageClient
 
 def main_window():
     app = QApplication(sys.argv)
@@ -76,5 +78,17 @@ def main() -> None:
             print('Opção inválida. Tente novamente.')
 
 if __name__ == '__main__':
-    main_window()
-    # main()
+    client = Client(
+        name='Vitor Barbon 2',
+        address='Rua 1, 123 - Bairro - Cidade - SP',
+        email='email@email.com',
+        phone='(11) 99999-9999',
+        occupation='C-2',
+        fire_department_service=FireDepartmentService(
+            area=100.0,
+            fire_load=200.0
+        ),
+    )
+    storage = StorageClient(paths.DATA_DIR / 'clients.jsonl')
+    storage.add_client_jsonl(client)
+    
