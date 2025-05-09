@@ -8,7 +8,7 @@ from certificates.create_template_xlsx import create_template
 from certificates.extract_data_xlsx import extract_data_from_xlsx
 from ui.main_window import MainWindow
 from project.utils import paths
-from clients.models.client import Client, FireDepartmentService, CityHallService
+from clients.models.client import ClientDB, FireDepartmentServiceDB, CityHallServiceDB
 from clients.storage.storage import StorageClient
 
 def main_window():
@@ -78,22 +78,18 @@ def main() -> None:
             print('Opção inválida. Tente novamente.')
 
 if __name__ == '__main__':
-    client = Client(
+    client = ClientDB(
         name='Vitor Barbon 2',
         address='Rua 1, 123 - Bairro - Cidade - SP',
         email='email@email.com',
         phone='(11) 99999-9999',
         occupation='C-2',
-        fire_department_service=FireDepartmentService(
+        fire_department_service=FireDepartmentServiceDB(
             area=100.0,
             fire_load=200.0
         ),
     )
+    
     storage = StorageClient(paths.DATA_DIR / 'clients.db')
-    # storage.add_client_jsonl(client)
-    clients_filtered = storage.filter_client('Vitor Barbon 2')    
-    for client in clients_filtered:
-        print(client, sep='\n')
-        
-        
+    storage.add_client(client)       
     
