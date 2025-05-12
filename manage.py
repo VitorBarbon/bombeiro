@@ -8,7 +8,7 @@ from certificates.create_template_xlsx import create_template
 from certificates.extract_data_xlsx import extract_data_from_xlsx
 from ui.main_window import MainWindow
 from project.utils import paths
-from clients.models.client import ClientDB, FireDepartmentServiceDB, CityHallServiceDB
+from clients.models.client import ClientDB, FireDepartmentServiceDB, CityHallServiceDB, create_tables
 from clients.storage.storage import StorageClient
 
 def main_window():
@@ -78,6 +78,7 @@ def main() -> None:
             print('Opção inválida. Tente novamente.')
 
 if __name__ == '__main__':
+    create_tables()
     client = ClientDB(
         name='Vitor Barbon 2',
         address='Rua 1, 123 - Bairro - Cidade - SP',
@@ -89,7 +90,6 @@ if __name__ == '__main__':
             fire_load=200.0
         ),
     )
-    
-    storage = StorageClient(paths.DATA_DIR / 'clients.db')
+    storage = StorageClient()
     storage.add_client(client)       
     

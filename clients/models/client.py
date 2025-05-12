@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, create_engine
 from sqlalchemy.orm import declarative_base, relationship
+from project.utils import paths
+
 
 Base = declarative_base()
 
@@ -30,3 +32,9 @@ class ClientDB(Base):
 
     city_hall_service = relationship("CityHallServiceDB")
     fire_department_service = relationship("FireDepartmentServiceDB")
+
+
+engine = create_engine(f'sqlite:///{paths.DATA_DIR / "clients.db"}')
+
+def create_tables() -> None:
+    Base.metadata.create_all(engine)
