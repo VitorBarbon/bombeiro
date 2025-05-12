@@ -88,7 +88,7 @@ if __name__ == '__main__':
         fire_department_service=FireDepartmentServiceDB(
             area=100.0,
             fire_load=200.0
-        ),
+        ) | None,
     )
     storage = StorageClient()
     storage.add_client(client)       
