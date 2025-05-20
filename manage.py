@@ -2,13 +2,14 @@ import sys
 from tkinter import Tk, filedialog
 from typing import Dict, List
 from PySide6.QtWidgets import QApplication
+from colorama import Fore, Style
 
 from certificates.certificate_creator import Certificate, TEMPLATE_DIR
 from certificates.create_template_xlsx import create_template
 from certificates.extract_data_xlsx import extract_data_from_xlsx
 from ui.main_window import MainWindow
 from project.utils import paths
-from clients.models.client import ClientDB, FireDepartmentServiceDB, CityHallServiceDB, create_tables
+from clients.models.client import ClientDB, FireDepartmentServiceDB, CityHallServiceDB
 from clients.storage.storage import StorageClient
 
 def main_window():
@@ -60,11 +61,32 @@ def create_certificates() -> None:
         print(participant['names'], client[0]['date'], workload, client[0]['company'])
         certificate.create_certificate(participant['names'], client[0]['date'], workload, client[0]['company'])
 
+
+def create_client() -> None:
+    """Cria um novo cliente."""
+    client_data = {
+        'name': input('Nome do cliente: '),
+        'email': input('Email do cliente: '),
+        'phone': input('Telefone do cliente: ')
+    }
+    storage = StorageClient()
+    storage.add_client(ClientDB(**client_data))
+
+
+def create_folder_client() -> None:
+    """Cria uma nova pasta para o cliente."""
+    client_folder = selected_folder_and_save()
+    client_folder.mkdir(parents=True, exist_ok=True)
+    print(Fore.GREEN + f'Pasta criada com sucesso: {client_folder}' + Style.RESET_ALL)
+
+
 def main() -> None:
     """Função principal que controla o fluxo do programa."""
     actions: Dict[str, callable] = {
         '1': create_template,
-        '2': create_certificates
+        '2': create_certificates,
+        '3': create_client,
+        '4': create_folder_client
     }
 
     while True:
@@ -78,18 +100,8 @@ def main() -> None:
             print('Opção inválida. Tente novamente.')
 
 if __name__ == '__main__':
-    create_tables()
-    client = ClientDB(
-        name='Vitor Barbon 2',
-        address='Rua 1, 123 - Bairro - Cidade - SP',
-        email='email@email.com',
-        phone='(11) 99999-9999',
-        occupation='C-2',
-        fire_department_service=FireDepartmentServiceDB(
-            area=100.0,
-            fire_load=200.0
-        ) | None,
-    )
-    storage = StorageClient()
-    storage.add_client(client)       
+    main()
+
+    # storage = StorageClient()
+    # print(*storage.get_all_clients(), sep='\n')
     
